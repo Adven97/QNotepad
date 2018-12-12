@@ -15,10 +15,30 @@ class MyMainWindow(QMainWindow):
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('Plik')
+        nowy = QAction('Nowy', self)
+        otworz = QAction('Otwórz', self)
+        zapisz = QAction('Zapisz', self)
+        zapiszjako = QAction('Zapisz jako...', self)
+        koniec = QAction('Koniec', self)
+
+        fileMenu.addAction(nowy)
+        fileMenu.addAction(otworz)
+        fileMenu.addAction(zapisz)
+        fileMenu.addAction(zapiszjako)
+        fileMenu.addAction(koniec)
+
         editMenu = mainMenu.addMenu('Edycja')
+        wytnij = QAction('Wytnij', self)
+        kopiuj = QAction('Kopiuj', self)
+        wklej = QAction('Wklej', self)
+        zaznacz = QAction('Zaznacz wszystko', self)
 
-        self.toolbar = self.addToolBar('Exit')
+        editMenu.addAction(wytnij)
+        editMenu.addAction(kopiuj)
+        editMenu.addAction(wklej)
+        editMenu.addAction(zaznacz)
 
+        self.toolbar = self.addToolBar('')
         newAct = QAction(QIcon('img/1.png'), 'new', self)
         #newAct.setShortcut('Ctrl+Q')
         self.toolbar.addAction(newAct)
