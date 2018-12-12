@@ -11,7 +11,7 @@ class MyMainWindow(QMainWindow):
 
         self.setWindowTitle('QNotatnik')
         self.setGeometry(1, 1, 1600, 1200)
-        self.setWindowIcon(QIcon('umowa.png'))
+        self.setWindowIcon(QIcon('img/umowa.png'))
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('Plik')
@@ -19,28 +19,28 @@ class MyMainWindow(QMainWindow):
 
         self.toolbar = self.addToolBar('Exit')
 
-        newAct = QAction(QIcon('1.png'), 'new', self)
+        newAct = QAction(QIcon('img/1.png'), 'new', self)
         #newAct.setShortcut('Ctrl+Q')
         self.toolbar.addAction(newAct)
-        open = QAction(QIcon("3.png"),"open",self)
+        open = QAction(QIcon("img/3.png"),"open",self)
         self.toolbar.addAction(open)
-        search = QAction(QIcon("6.png"),"search",self)
+        search = QAction(QIcon("img/6.png"),"search",self)
         self.toolbar.addAction(search)
-        save = QAction(QIcon("7.png"),"save",self)
+        save = QAction(QIcon("img/7.png"),"save",self)
         self.toolbar.addAction(save)
 
-        undo = QAction(QIcon("2.png"),"undo",self)
+        undo = QAction(QIcon("img/2.png"),"undo",self)
         self.toolbar.addAction(undo)
-        redo = QAction(QIcon("5.png"),"redo",self)
+        redo = QAction(QIcon("img/5.png"),"redo",self)
         self.toolbar.addAction(redo)
 
-        cut = QAction(QIcon("4.png"),"cut",self)
+        cut = QAction(QIcon("img/4.png"),"cut",self)
         cut.setShortcut('Ctrl+X')
         self.toolbar.addAction(cut)
-        copy = QAction(QIcon("9.png"),"copy",self)
+        copy = QAction(QIcon("img/9.png"),"copy",self)
         copy.setShortcut('Ctrl+C')
         self.toolbar.addAction(copy)
-        paste = QAction(QIcon("8.png"),"paste",self)
+        paste = QAction(QIcon("img/8.png"),"paste",self)
         paste.setShortcut('Ctrl+V')
         self.toolbar.addAction(paste)
 
