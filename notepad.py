@@ -12,6 +12,7 @@ class MyMainWindow(QMainWindow):
         self.setWindowTitle('QNotatnik')
         self.setGeometry(1, 1, 1600, 1200)
         self.setWindowIcon(QIcon('img/umowa.png'))
+        self.setAutoFillBackground(True)
 
         mainMenu = self.menuBar()
         fileMenu = mainMenu.addMenu('Plik')
@@ -73,32 +74,67 @@ class App(QWidget):
         super().__init__()
         self.initUI()
 
+    def btnstate(self,b):
+
+      if b.text() == "Times New Roman":
+         if b.isChecked() == True:
+            self.font.setFamily("Times New Roman")
+            #self.font.setPointSize(22)
+            self.tree2.setFont(self.font)
+
+      if b.text() == "Arial":
+           if b.isChecked() == True:
+              self.font.setFamily("Arial")
+              #self.font.setPointSize(12)
+              self.tree2.setFont(self.font)
+
+      if b.text() == "Courier New":
+           if b.isChecked() == True:
+              self.font.setFamily("Courier New")
+             # self.font.setPointSize(8)
+              self.tree2.setFont(self.font)
+
+
+    def on_click(self,color):
+        def setcolor():
+            self.tree2.setStyleSheet("background-color:"+color+";")
+        return setcolor
+
+    def selectionchange(self):
+        self.font.setPointSize(int(self.combobox.currentText()))
+
+
     def initUI(self):
 
         vmain = QVBoxLayout()
 
         self.model = QFileSystemModel()
         self.model.setRootPath('')
-
+        self.font = QFont()
 
         self.tree = QVBoxLayout()
-        combobox = QComboBox()
-        combobox.addItem("8")
-        combobox.addItem("9")
-        combobox.addItem("10")
-        combobox.addItem("11")
-        combobox.addItem("12")
-        combobox.addItem("14")
-        combobox.addItem("16")
-        combobox.addItem("18")
-        combobox.addItem("20")
-        combobox.addItem("22")
-        combobox.addItem("24")
-        rb1 = QRadioButton('Times New Roman')
-        rb2 = QRadioButton('Arial')
-        rb3 = QRadioButton('Courier New')
+        self.combobox = QComboBox()
+        self.combobox.addItem("8")
+        self.combobox.addItem("9")
+        self.combobox.addItem("10")
+        self.combobox.addItem("11")
+        self.combobox.addItem("12")
+        self.combobox.addItem("14")
+        self.combobox.addItem("16")
+        self.combobox.addItem("18")
+        self.combobox.addItem("20")
+        self.combobox.addItem("22")
+        self.combobox.addItem("24")
+        self.combobox.currentIndexChanged.connect(self.selectionchange)
 
-        colors =['#000000','#808080', '#680000', '#F00000', '#CC6600',
+        self.rb1 = QRadioButton('Times New Roman')
+        self.rb1.toggled.connect(lambda:self.btnstate(self.rb1))
+        self.rb2 = QRadioButton('Arial')
+        self.rb2.toggled.connect(lambda:self.btnstate(self.rb2))
+        self.rb3 = QRadioButton('Courier New')
+        self.rb3.toggled.connect(lambda:self.btnstate(self.rb3))
+
+        colors =['#181818','#808080', '#680000', '#F00000', '#CC6600',
                     '#ffffff', '#D0D0D0', '#CC6633', '#FF99FF', '#FFFF00',
                     '#FFFF66', '#99FF00', '#3399CC', '#330099', '#990099',
                     '#FFFF99', '#99FF66', '#66FFFF', '#6699FF', '#996699' ]
@@ -107,6 +143,7 @@ class App(QWidget):
         for color in colors:
             inxd =colors.index(color)
             clr = QPushButton()
+            clr.clicked.connect(self.on_click(color))
             clr.setFixedWidth(35)
             clr.setFixedHeight(35)
             clr.setStyleSheet("background-color:"+color+";");
@@ -120,15 +157,17 @@ class App(QWidget):
                 colorbox.addWidget(clr,3,inxd -15)
 
 
-        self.tree.addWidget(combobox)
-        self.tree.addWidget(rb1)
-        self.tree.addWidget(rb2)
-        self.tree.addWidget(rb3)
+        self.tree.addWidget(self.combobox)
+        self.tree.addWidget(self.rb1)
+        self.tree.addWidget(self.rb2)
+        self.tree.addWidget(self.rb3)
         self.tree.addLayout(colorbox)
         #self.tree.setSizeConstraint(QLayout.SetFixedSize)
         self.tree.setAlignment(Qt.AlignTop)
 
         self.tree2 = QTextEdit()
+        self.tree2.setAutoFillBackground(True)
+
     #    self.tree2.setFixedWidth(1050)
 
         ###     b1.setIcon(QIcon('tc.png'))     ustawienie img na przycisk
