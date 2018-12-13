@@ -4,6 +4,29 @@ from PyQt5.QtGui import *
 from PyQt5.QtCore import *
 
 class MyMainWindow(QMainWindow):
+
+    def getfiles(self):
+
+            try:
+                self.file_path = QFileDialog.getOpenFileName(self, 'Open File', './',
+                                                             filter="Text Files(*.txt)")
+
+                if self.file_path[0]:
+                    self.file_name = (self.file_path[0].split('/'))[-1]
+
+                    self.setWindowTitle("{} - QNotatnik".format(self.file_name))
+
+                    file_open = open(self.file_path[0], 'r+')
+                    self.statusBar().showMessage('Open... {}'.format(self.file_path[0]))
+
+                    with file_open:
+                        content = file_open.read()
+                        self.form_widget.tree2.setPlainText(content)
+
+            except UnicodeDecodeError as why:
+                        self.error_box(why)
+                        pass
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.form_widget = App()
@@ -44,6 +67,7 @@ class MyMainWindow(QMainWindow):
         #newAct.setShortcut('Ctrl+Q')
         self.toolbar.addAction(newAct)
         open = QAction(QIcon("img/3.png"),"open",self)
+        open.triggered.connect(self.getfiles)
         self.toolbar.addAction(open)
         search = QAction(QIcon("img/6.png"),"search",self)
         self.toolbar.addAction(search)
