@@ -27,6 +27,22 @@ class MyMainWindow(QMainWindow):
                         self.error_box(why)
                         pass
 
+    def saveInput(self):
+
+        try:
+            name = QFileDialog.getSaveFileName(self, "Save File", './', '.txt')[0]
+            name = name+".txt"
+            file = open(name, 'w')
+        #    text = self.form_widget.tree2.text()
+            lines = self.form_widget.tree2.document().toPlainText()
+            file.write(lines)
+            file.close()
+
+        except UnicodeDecodeError as why:
+                    self.error_box(why)
+                    pass
+
+
     def __init__(self, parent=None):
         super().__init__(parent)
         self.form_widget = App()
@@ -72,6 +88,8 @@ class MyMainWindow(QMainWindow):
         search = QAction(QIcon("img/6.png"),"search",self)
         self.toolbar.addAction(search)
         save = QAction(QIcon("img/7.png"),"save",self)
+        save.triggered.connect(self.saveInput)
+        save.setShortcut('Ctrl+S')
         self.toolbar.addAction(save)
 
         undo = QAction(QIcon("img/2.png"),"undo",self)
