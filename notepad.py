@@ -35,8 +35,9 @@ class MyMainWindow(QMainWindow):
             file = open(name, 'w')
         #    text = self.form_widget.tree2.text()
             lines = self.form_widget.tree2.document().toPlainText()
-            file.write(lines)
-            file.close()
+            with file:
+                file.write(lines)
+                file.close()
 
         except UnicodeDecodeError as why:
                     self.error_box(why)
@@ -57,9 +58,13 @@ class MyMainWindow(QMainWindow):
         fileMenu = mainMenu.addMenu('Plik')
         nowy = QAction('Nowy', self)
         otworz = QAction('Otwórz', self)
+        otworz.triggered.connect(self.getfiles)
         zapisz = QAction('Zapisz', self)
+        zapisz.triggered.connect(self.saveInput)
         zapiszjako = QAction('Zapisz jako...', self)
+        zapiszjako.triggered.connect(self.saveInput)
         koniec = QAction('Koniec', self)
+        koniec.triggered.connect(lambda: self.close())
 
         fileMenu.addAction(nowy)
         fileMenu.addAction(otworz)
