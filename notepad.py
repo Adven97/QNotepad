@@ -21,7 +21,7 @@ class MyMainWindow(QMainWindow):
 
                     with file_open:
                         content = file_open.read()
-                        self.form_widget.tree2.setPlainText(content)
+                        self.form_widget.poletxt.setPlainText(content)
 
             except UnicodeDecodeError as why:
                         self.error_box(why)
@@ -33,8 +33,8 @@ class MyMainWindow(QMainWindow):
             name = QFileDialog.getSaveFileName(self, "Save File", './', '.txt')[0]
             name = name+".txt"
             file = open(name, 'w')
-        #    text = self.form_widget.tree2.text()
-            lines = self.form_widget.tree2.document().toPlainText()
+        #    text = self.form_widget.poletxt.text()
+            lines = self.form_widget.poletxt.document().toPlainText()
             with file:
                 file.write(lines)
                 file.close()
@@ -127,28 +127,30 @@ class App(QWidget):
          if b.isChecked() == True:
             self.font.setFamily("Times New Roman")
             #self.font.setPointSize(22)
-            self.tree2.setFont(self.font)
+            self.poletxt.setFont(self.font)
 
       if b.text() == "Arial":
            if b.isChecked() == True:
               self.font.setFamily("Arial")
               #self.font.setPointSize(12)
-              self.tree2.setFont(self.font)
+              self.poletxt.setFont(self.font)
 
       if b.text() == "Courier New":
            if b.isChecked() == True:
               self.font.setFamily("Courier New")
              # self.font.setPointSize(8)
-              self.tree2.setFont(self.font)
+              self.poletxt.setFont(self.font)
 
 
     def on_click(self,color):
         def setcolor():
-            self.tree2.setStyleSheet("background-color:"+color+";")
+            self.poletxt.setStyleSheet("background-color:"+color+";")
+            self.poletxt.setFont(self.font)
         return setcolor
 
     def selectionchange(self):
         self.font.setPointSize(int(self.combobox.currentText()))
+        self.poletxt.setFont(self.font)
 
 
     def initUI(self):
@@ -159,10 +161,8 @@ class App(QWidget):
         self.model.setRootPath('')
         self.font = QFont()
 
-        self.tree = QVBoxLayout()
+        self.leftside = QVBoxLayout()
         self.combobox = QComboBox()
-        self.combobox.addItem("8")
-        self.combobox.addItem("9")
         self.combobox.addItem("10")
         self.combobox.addItem("11")
         self.combobox.addItem("12")
@@ -175,9 +175,14 @@ class App(QWidget):
         self.combobox.currentIndexChanged.connect(self.selectionchange)
 
         self.rb1 = QRadioButton('Times New Roman')
+        self.rb1.setChecked(True)
+        self.font.setFamily("Times New Roman")
+
         self.rb1.toggled.connect(lambda:self.btnstate(self.rb1))
+
         self.rb2 = QRadioButton('Arial')
         self.rb2.toggled.connect(lambda:self.btnstate(self.rb2))
+
         self.rb3 = QRadioButton('Courier New')
         self.rb3.toggled.connect(lambda:self.btnstate(self.rb3))
 
@@ -204,24 +209,25 @@ class App(QWidget):
                 colorbox.addWidget(clr,3,inxd -15)
 
 
-        self.tree.addWidget(self.combobox)
-        self.tree.addWidget(self.rb1)
-        self.tree.addWidget(self.rb2)
-        self.tree.addWidget(self.rb3)
-        self.tree.addLayout(colorbox)
-        #self.tree.setSizeConstraint(QLayout.SetFixedSize)
-        self.tree.setAlignment(Qt.AlignTop)
+        self.leftside.addWidget(self.combobox)
+        self.leftside.addWidget(self.rb1)
+        self.leftside.addWidget(self.rb2)
+        self.leftside.addWidget(self.rb3)
+        self.leftside.addLayout(colorbox)
+        #self.leftside.setSizeConstraint(QLayout.SetFixedSize)
+        self.leftside.setAlignment(Qt.AlignTop)
 
-        self.tree2 = QTextEdit()
-        self.tree2.setAutoFillBackground(True)
+        self.poletxt = QTextEdit()
+        self.poletxt.setAutoFillBackground(True)
+        self.poletxt.setFont(self.font)
 
-    #    self.tree2.setFixedWidth(1050)
+    #    self.poletxt.setFixedWidth(1050)
 
         ###     b1.setIcon(QIcon('tc.png'))     ustawienie img na przycisk
 
         windowLayout = QHBoxLayout()
-        windowLayout.addLayout(self.tree)
-        windowLayout.addWidget(self.tree2)
+        windowLayout.addLayout(self.leftside)
+        windowLayout.addWidget(self.poletxt)
         vmain.addLayout(windowLayout)
 
 
