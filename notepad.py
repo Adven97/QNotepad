@@ -100,8 +100,13 @@ class MyMainWindow(QMainWindow):
         self.toolbar.addAction(save)
 
         undo = QAction(QIcon("img/2.png"),"undo",self)
+        undo.setShortcut('Ctrl+Z')
+        undo.triggered.connect(self.form_widget.poletxt.undo)
         self.toolbar.addAction(undo)
+
         redo = QAction(QIcon("img/5.png"),"redo",self)
+        redo.setShortcut('Ctrl+Shift+Z')
+        redo.triggered.connect(self.form_widget.poletxt.redo)
         self.toolbar.addAction(redo)
 
         cut = QAction(QIcon("img/4.png"),"cut",self)
@@ -127,7 +132,7 @@ class App(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
-        #self.windoww = MyMainWindow()
+        # self.windoww = MyMainWindow()
 
     def btnstate(self,b):
 
@@ -135,19 +140,19 @@ class App(QWidget):
          if b.isChecked() == True:
             self.font.setFamily("Times New Roman")
             self.poletxt.setFont(self.font)
-            # self.statusBar().showMessage('Zmieniono czcionke na Times New Roman')
+            # self.windoww.statusBar().showMessage('Zmieniono czcionke na Times New Roman')
 
       if b.text() == "Arial":
            if b.isChecked() == True:
               self.font.setFamily("Arial")
               self.poletxt.setFont(self.font)
-              # self.statusBar().showMessage('Zmieniono czcionke na Arial')
+              # windoww.statusBar().showMessage('Zmieniono czcionke na Arial')
 
       if b.text() == "Courier New":
            if b.isChecked() == True:
               self.font.setFamily("Courier New")
               self.poletxt.setFont(self.font)
-              self.statusBar().showMessage('Zmieniono czcionke na Courier New')
+              # windoww.statusBar().showMessage('Zmieniono czcionke na Courier New')
 
 
     def on_click(self,color):
@@ -232,7 +237,6 @@ class App(QWidget):
         self.poletxt = QTextEdit()
         self.poletxt.setAutoFillBackground(True)
         self.poletxt.setFont(self.font)
-
 
         windowLayout = QHBoxLayout()
         windowLayout.addLayout(self.leftside)
