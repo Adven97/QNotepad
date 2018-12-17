@@ -22,6 +22,7 @@ class MyMainWindow(QMainWindow):
                     with file_open:
                         content = file_open.read()
                         self.form_widget.poletxt.setPlainText(content)
+                        self.statusBar().showMessage('Odczyt z pliku')
 
             except UnicodeDecodeError as why:
                         self.error_box(why)
@@ -38,6 +39,7 @@ class MyMainWindow(QMainWindow):
             with file:
                 file.write(lines)
                 file.close()
+                self.statusBar().showMessage('Zapis do pliku')
 
         except UnicodeDecodeError as why:
                     self.error_box(why)
@@ -103,13 +105,18 @@ class MyMainWindow(QMainWindow):
         self.toolbar.addAction(redo)
 
         cut = QAction(QIcon("img/4.png"),"cut",self)
+        cut.triggered.connect(lambda: QKeySequence("Ctrl+X"))
         cut.setShortcut('Ctrl+X')
+        cut.triggered.connect(self.form_widget.poletxt.cut)
+
         self.toolbar.addAction(cut)
         copy = QAction(QIcon("img/9.png"),"copy",self)
         copy.setShortcut('Ctrl+C')
+        copy.triggered.connect(self.form_widget.poletxt.copy)
         self.toolbar.addAction(copy)
         paste = QAction(QIcon("img/8.png"),"paste",self)
         paste.setShortcut('Ctrl+V')
+        paste.triggered.connect(self.form_widget.poletxt.paste)
         self.toolbar.addAction(paste)
 
         self.statusBar().showMessage('Status bar (opisuje ostatnio wykonaną czynność)')
@@ -120,37 +127,40 @@ class App(QWidget):
     def __init__(self):
         super().__init__()
         self.initUI()
+        #self.windoww = MyMainWindow()
 
     def btnstate(self,b):
 
       if b.text() == "Times New Roman":
          if b.isChecked() == True:
             self.font.setFamily("Times New Roman")
-            #self.font.setPointSize(22)
             self.poletxt.setFont(self.font)
+            # self.statusBar().showMessage('Zmieniono czcionke na Times New Roman')
 
       if b.text() == "Arial":
            if b.isChecked() == True:
               self.font.setFamily("Arial")
-              #self.font.setPointSize(12)
               self.poletxt.setFont(self.font)
+              # self.statusBar().showMessage('Zmieniono czcionke na Arial')
 
       if b.text() == "Courier New":
            if b.isChecked() == True:
               self.font.setFamily("Courier New")
-             # self.font.setPointSize(8)
               self.poletxt.setFont(self.font)
+              self.statusBar().showMessage('Zmieniono czcionke na Courier New')
 
 
     def on_click(self,color):
         def setcolor():
             self.poletxt.setStyleSheet("background-color:"+color+";")
             self.poletxt.setFont(self.font)
+            # self.statusBar().showMessage('Zmieniono kolor tla')
         return setcolor
 
     def selectionchange(self):
         self.font.setPointSize(int(self.combobox.currentText()))
         self.poletxt.setFont(self.font)
+        # self.statusBar().showMessage('Zmieniono rozmiar czcionki')
 
 
     def initUI(self):
@@ -172,6 +182,9 @@ class App(QWidget):
         self.combobox.addItem("20")
         self.combobox.addItem("22")
         self.combobox.addItem("24")
+        self.combobox.addItem("26")
+        self.combobox.addItem("28")
+        self.combobox.addItem("30")
         self.combobox.currentIndexChanged.connect(self.selectionchange)
 
         self.rb1 = QRadioButton('Times New Roman')
@@ -214,22 +227,17 @@ class App(QWidget):
         self.leftside.addWidget(self.rb2)
         self.leftside.addWidget(self.rb3)
         self.leftside.addLayout(colorbox)
-        #self.leftside.setSizeConstraint(QLayout.SetFixedSize)
         self.leftside.setAlignment(Qt.AlignTop)
 
         self.poletxt = QTextEdit()
         self.poletxt.setAutoFillBackground(True)
         self.poletxt.setFont(self.font)
 
-    #    self.poletxt.setFixedWidth(1050)
-
-        ###     b1.setIcon(QIcon('tc.png'))     ustawienie img na przycisk
 
         windowLayout = QHBoxLayout()
         windowLayout.addLayout(self.leftside)
         windowLayout.addWidget(self.poletxt)
         vmain.addLayout(windowLayout)
-
 
         self.setLayout(vmain)
 
